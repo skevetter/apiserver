@@ -5,8 +5,8 @@ package v1
 import (
 	"net/http"
 
-	v1 "github.com/loft-sh/test/apis/test/v1"
-	"github.com/loft-sh/test/pkg/client/clientset_generated/clientset/scheme"
+	v1 "github.com/skevetter/test/apis/test/v1"
+	"github.com/skevetter/test/pkg/client/clientset_generated/clientset/scheme"
 	rest "k8s.io/client-go/rest"
 )
 

@@ -3,8 +3,8 @@
 package v1
 
 import (
-	"github.com/loft-sh/apiserver/pkg/builders"
-	"github.com/loft-sh/test/apis/test"
+	"github.com/skevetter/apiserver/pkg/builders"
+	"github.com/skevetter/test/apis/test"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"

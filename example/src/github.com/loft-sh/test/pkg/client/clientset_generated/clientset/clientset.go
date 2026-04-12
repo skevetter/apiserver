@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
-	testv1 "github.com/loft-sh/test/pkg/client/clientset_generated/clientset/typed/test/v1"
+	testv1 "github.com/skevetter/test/pkg/client/clientset_generated/clientset/typed/test/v1"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"

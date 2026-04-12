@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/loft-sh/apiserver/pkg/admission"
-	"github.com/loft-sh/apiserver/pkg/apiserver"
-	"github.com/loft-sh/apiserver/pkg/builders"
+	"github.com/skevetter/apiserver/pkg/admission"
+	"github.com/skevetter/apiserver/pkg/apiserver"
+	"github.com/skevetter/apiserver/pkg/builders"
 	oteltrace "go.opentelemetry.io/otel/trace"
 	utilnet "k8s.io/apimachinery/pkg/util/net"
 	"k8s.io/apimachinery/pkg/util/sets"

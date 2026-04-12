@@ -4,7 +4,7 @@
 
 // +k8s:openapi-gen=true
 // +k8s:deepcopy-gen=package,register
-// +k8s:conversion-gen=github.com/loft-sh/test/apis/test
+// +k8s:conversion-gen=github.com/skevetter/test/apis/test
 // +k8s:defaulter-gen=TypeMeta
 // +groupName=test.loft.sh
-package v1 // import "github.com/loft-sh/test/apis/test/v1"
+package v1 // import "github.com/skevetter/test/apis/test/v1"

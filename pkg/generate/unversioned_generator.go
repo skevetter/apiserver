@@ -59,7 +59,7 @@ var UnversionedAPIImports = []string{
 	"k8s.io/apimachinery/pkg/runtime/schema",
 	"k8s.io/apiserver/pkg/registry/generic",
 	"k8s.io/apiserver/pkg/registry/rest",
-	"github.com/loft-sh/apiserver/pkg/builders"}
+	"github.com/skevetter/apiserver/pkg/builders"}
 
 var UnversionedAPITemplate = `
 type NewRESTFunc func() rest.Storage

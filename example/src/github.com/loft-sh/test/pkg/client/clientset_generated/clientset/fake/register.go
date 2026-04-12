@@ -3,7 +3,7 @@
 package fake
 
 import (
-	testv1 "github.com/loft-sh/test/apis/test/v1"
+	testv1 "github.com/skevetter/test/apis/test/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"

@@ -3,9 +3,9 @@
 package fake
 
 import (
-	clientset "github.com/loft-sh/test/pkg/client/clientset_generated/clientset"
-	testv1 "github.com/loft-sh/test/pkg/client/clientset_generated/clientset/typed/test/v1"
-	faketestv1 "github.com/loft-sh/test/pkg/client/clientset_generated/clientset/typed/test/v1/fake"
+	clientset "github.com/skevetter/test/pkg/client/clientset_generated/clientset"
+	testv1 "github.com/skevetter/test/pkg/client/clientset_generated/clientset/typed/test/v1"
+	faketestv1 "github.com/skevetter/test/pkg/client/clientset_generated/clientset/typed/test/v1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"

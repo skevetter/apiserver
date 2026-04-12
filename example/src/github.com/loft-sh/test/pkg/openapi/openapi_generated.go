@@ -17,10 +17,10 @@ import (
 
 func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenAPIDefinition {
 	return map[string]common.OpenAPIDefinition{
-		"github.com/loft-sh/test/apis/test/v1.ClusterRole":                              schema_test_apis_test_v1_ClusterRole(ref),
-		"github.com/loft-sh/test/apis/test/v1.ClusterRoleList":                          schema_test_apis_test_v1_ClusterRoleList(ref),
-		"github.com/loft-sh/test/apis/test/v1.ClusterRoleSpec":                          schema_test_apis_test_v1_ClusterRoleSpec(ref),
-		"github.com/loft-sh/test/apis/test/v1.ClusterRoleStatus":                        schema_test_apis_test_v1_ClusterRoleStatus(ref),
+		"github.com/skevetter/test/apis/test/v1.ClusterRole":                              schema_test_apis_test_v1_ClusterRole(ref),
+		"github.com/skevetter/test/apis/test/v1.ClusterRoleList":                          schema_test_apis_test_v1_ClusterRoleList(ref),
+		"github.com/skevetter/test/apis/test/v1.ClusterRoleSpec":                          schema_test_apis_test_v1_ClusterRoleSpec(ref),
+		"github.com/skevetter/test/apis/test/v1.ClusterRoleStatus":                        schema_test_apis_test_v1_ClusterRoleStatus(ref),
 		"k8s.io/api/admissionregistration/v1.MatchCondition":                            schema_k8sio_api_admissionregistration_v1_MatchCondition(ref),
 		"k8s.io/api/admissionregistration/v1.MutatingWebhook":                           schema_k8sio_api_admissionregistration_v1_MutatingWebhook(ref),
 		"k8s.io/api/admissionregistration/v1.MutatingWebhookConfiguration":              schema_k8sio_api_admissionregistration_v1_MutatingWebhookConfiguration(ref),
@@ -788,20 +788,20 @@ func schema_test_apis_test_v1_ClusterRole(ref common.ReferenceCallback) common.O
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/loft-sh/test/apis/test/v1.ClusterRoleSpec"),
+							Ref:     ref("github.com/skevetter/test/apis/test/v1.ClusterRoleSpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/loft-sh/test/apis/test/v1.ClusterRoleStatus"),
+							Ref:     ref("github.com/skevetter/test/apis/test/v1.ClusterRoleStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/loft-sh/test/apis/test/v1.ClusterRoleSpec", "github.com/loft-sh/test/apis/test/v1.ClusterRoleStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/skevetter/test/apis/test/v1.ClusterRoleSpec", "github.com/skevetter/test/apis/test/v1.ClusterRoleStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
@@ -838,7 +838,7 @@ func schema_test_apis_test_v1_ClusterRoleList(ref common.ReferenceCallback) comm
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/loft-sh/test/apis/test/v1.ClusterRole"),
+										Ref:     ref("github.com/skevetter/test/apis/test/v1.ClusterRole"),
 									},
 								},
 							},
@@ -849,7 +849,7 @@ func schema_test_apis_test_v1_ClusterRoleList(ref common.ReferenceCallback) comm
 			},
 		},
 		Dependencies: []string{
-			"github.com/loft-sh/test/apis/test/v1.ClusterRole", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+			"github.com/skevetter/test/apis/test/v1.ClusterRole", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 

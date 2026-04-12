@@ -8,7 +8,7 @@ package v1
 import (
 	unsafe "unsafe"
 
-	test "github.com/loft-sh/test/apis/test"
+	test "github.com/skevetter/test/apis/test"
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 )
