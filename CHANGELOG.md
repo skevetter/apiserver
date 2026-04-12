@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/skevetter/apiserver/compare/v1.0.1...v1.0.2) (2026-04-12)
+
+
+### Bug Fixes
+
+* export shell variables to resolve shellcheck SC2034 warnings ([#12](https://github.com/skevetter/apiserver/issues/12)) ([7e0ae3e](https://github.com/skevetter/apiserver/commit/7e0ae3e6220065484433e3578328c8aa577ecf93))
+
 ## [1.0.1](https://github.com/skevetter/apiserver/compare/v1.0.0...v1.0.1) (2026-04-12)
 
 
