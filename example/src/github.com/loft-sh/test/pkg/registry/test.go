@@ -3,8 +3,8 @@ package registry
 import (
 	"context"
 
-	"github.com/loft-sh/test/apis/test"
-	testv1 "github.com/loft-sh/test/apis/test/v1"
+	"github.com/skevetter/test/apis/test"
+	testv1 "github.com/skevetter/test/apis/test/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/registry/rest"

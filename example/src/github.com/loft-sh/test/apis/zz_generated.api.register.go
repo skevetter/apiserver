@@ -3,10 +3,10 @@
 package apis
 
 import (
-	"github.com/loft-sh/apiserver/pkg/builders"
-	"github.com/loft-sh/test/apis/test"
-	_ "github.com/loft-sh/test/apis/test/install" // Install the test group
-	testv1 "github.com/loft-sh/test/apis/test/v1"
+	"github.com/skevetter/apiserver/pkg/builders"
+	"github.com/skevetter/test/apis/test"
+	_ "github.com/skevetter/test/apis/test/install" // Install the test group
+	testv1 "github.com/skevetter/test/apis/test/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 )
 
@@ -28,7 +28,7 @@ func GetAllApiBuilders() []*builders.APIGroupBuilder {
 func GetTestAPIBuilder() *builders.APIGroupBuilder {
 	return builders.NewApiGroupBuilder(
 		"test.loft.sh",
-		"github.com/loft-sh/test/apis/test").
+		"github.com/skevetter/test/apis/test").
 		WithUnVersionedApi(test.ApiVersion).
 		WithVersionedApis(
 			testv1.ApiVersion,

@@ -20,7 +20,7 @@ import (
 	"os"
 	"runtime"
 
-	template2 "github.com/loft-sh/apiserver/pkg/generate"
+	template2 "github.com/skevetter/apiserver/pkg/generate"
 
 	"k8s.io/klog/v2"
 )
@@ -31,7 +31,7 @@ func main() {
 	}
 
 	g := template2.Gen{}
-	if err := g.Execute("zz_generated.api.register.go", "github.com/loft-sh/test/apis/..."); err != nil {
+	if err := g.Execute("zz_generated.api.register.go", "github.com/skevetter/test/apis/..."); err != nil {
 		klog.Fatalf("Error: %v", err)
 	}
 	klog.V(2).Info("Completed successfully.")

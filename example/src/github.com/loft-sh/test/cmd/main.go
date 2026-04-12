@@ -17,12 +17,12 @@ limitations under the License.
 package main
 
 import (
-	apiserver "github.com/loft-sh/apiserver/pkg/server"
-	"github.com/loft-sh/test/apis"
-	"github.com/loft-sh/test/apis/test"
-	testv1 "github.com/loft-sh/test/apis/test/v1"
-	"github.com/loft-sh/test/pkg/openapi"
-	_ "github.com/loft-sh/test/pkg/registry"
+	apiserver "github.com/skevetter/apiserver/pkg/server"
+	"github.com/skevetter/test/apis"
+	"github.com/skevetter/test/apis/test"
+	testv1 "github.com/skevetter/test/apis/test/v1"
+	"github.com/skevetter/test/pkg/openapi"
+	_ "github.com/skevetter/test/pkg/registry"
 	apiregistrationv1 "k8s.io/kube-aggregator/pkg/apis/apiregistration/v1"
 
 	"k8s.io/apimachinery/pkg/runtime"

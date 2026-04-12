@@ -1,4 +1,4 @@
-module github.com/loft-sh/apiserver
+module github.com/skevetter/apiserver
 
 go 1.25.0
 
