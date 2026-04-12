@@ -4,7 +4,8 @@ set -e
 
 go mod vendor
 
-GO111MODULE=off
+export GO111MODULE=off
+export GOPATH
 GOPATH=$(pwd)/../../../../
 
 echo "Generate register..."
