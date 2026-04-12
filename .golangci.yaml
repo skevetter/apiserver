@@ -1,0 +1,31 @@
+version: "2"
+run:
+  timeout: 5m
+  concurrency: 8
+  exclude-dirs:
+    - example
+formatters:
+  enable:
+    - gci
+    - gofumpt
+    - goimports
+    - golines
+  exclusions:
+    paths:
+      - example
+linters:
+  enable:
+    - errcheck
+    - gocritic
+    - godot
+    - gosec
+    - lll
+    - misspell
+    - modernize
+    - revive
+    - staticcheck
+    - unused
+    - whitespace
+  settings:
+    lll:
+      line-length: 120

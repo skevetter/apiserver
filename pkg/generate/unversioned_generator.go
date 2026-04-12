@@ -40,7 +40,7 @@ func (d *unversionedGenerator) Imports(c *generator.Context) []string {
 
 func (d *unversionedGenerator) Finalize(context *generator.Context, w io.Writer) error {
 	temp := template.
-		Must(template.New("unversioned-wiring-template").Funcs(map[string]interface{}{
+		Must(template.New("unversioned-wiring-template").Funcs(map[string]any{
 			"public": namer.IC,
 		}).Parse(UnversionedAPITemplate))
 
@@ -59,7 +59,8 @@ var UnversionedAPIImports = []string{
 	"k8s.io/apimachinery/pkg/runtime/schema",
 	"k8s.io/apiserver/pkg/registry/generic",
 	"k8s.io/apiserver/pkg/registry/rest",
-	"github.com/skevetter/apiserver/pkg/builders"}
+	"github.com/skevetter/apiserver/pkg/builders",
+}
 
 var UnversionedAPITemplate = `
 type NewRESTFunc func() rest.Storage

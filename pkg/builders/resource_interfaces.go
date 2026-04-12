@@ -34,14 +34,14 @@ type HasObjectMetaSpecStatus interface {
 }
 
 type HasStatus interface {
-	NewStatus() interface{}
-	GetStatus() interface{}
-	SetStatus(status interface{})
+	NewStatus() any
+	GetStatus() any
+	SetStatus(status any)
 }
 
 type HasSpec interface {
-	GetSpec() interface{}
-	SetSpec(spec interface{})
+	GetSpec() any
+	SetSpec(spec any)
 }
 
 type HasObjectMeta interface {
@@ -71,10 +71,10 @@ type StorageBuilder interface {
 	WarningsOnUpdate(ctx context.Context, obj, old runtime.Object) []string
 }
 
-// Deprecated
+// Deprecated.
 type SchemeFns interface {
-	DefaultingFunction(obj interface{})
-	GetConversionFunctions() []interface{}
+	DefaultingFunction(obj any)
+	GetConversionFunctions() []any
 	Register(scheme *runtime.Scheme) error
 	FieldSelectorConversion(label, value string) (string, string, error)
 }

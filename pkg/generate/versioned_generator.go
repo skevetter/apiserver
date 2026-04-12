@@ -5,7 +5,6 @@ import (
 	"text/template"
 
 	"k8s.io/gengo/v2/generator"
-
 	"k8s.io/gengo/v2/namer"
 )
 
@@ -17,7 +16,11 @@ type versionedGenerator struct {
 
 var _ generator.Generator = &versionedGenerator{}
 
-func CreateVersionedGenerator(apiversion *APIVersion, apigroup *APIGroup, filename string) generator.Generator {
+func CreateVersionedGenerator(
+	apiversion *APIVersion,
+	apigroup *APIGroup,
+	filename string,
+) generator.Generator {
 	return &versionedGenerator{
 		generator.GoGenerator{OutputFilename: filename},
 		apiversion,
@@ -47,7 +50,7 @@ func (d *versionedGenerator) Imports(c *generator.Context) []string {
 }
 
 func (d *versionedGenerator) Finalize(context *generator.Context, w io.Writer) error {
-	temp := template.Must(template.New("versioned-template").Funcs(map[string]interface{}{
+	temp := template.Must(template.New("versioned-template").Funcs(map[string]any{
 		"public": namer.IC,
 	}).Parse(VersionedAPITemplate))
 	return temp.Execute(w, d.apiversion)

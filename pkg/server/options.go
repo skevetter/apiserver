@@ -39,8 +39,14 @@ type ServerOptions struct {
 	DisableWebhooks       bool
 }
 
-func (o *ServerOptions) GenericConfig(tweakConfig func(config *genericapiserver.RecommendedConfig) error) (*genericapiserver.RecommendedConfig, error) {
-	if err := o.RecommendedOptions.SecureServing.MaybeDefaultWithSelfSignedCerts("localhost", nil, nil); err != nil {
+func (o *ServerOptions) GenericConfig(
+	tweakConfig func(config *genericapiserver.RecommendedConfig) error,
+) (*genericapiserver.RecommendedConfig, error) {
+	if err := o.RecommendedOptions.SecureServing.MaybeDefaultWithSelfSignedCerts(
+		"localhost",
+		nil,
+		nil,
+	); err != nil {
 		return nil, fmt.Errorf("error creating self-signed certificates: %v", err)
 	}
 
@@ -67,13 +73,24 @@ func (o *ServerOptions) GenericConfig(tweakConfig func(config *genericapiserver.
 			LoopbackClientConfig: serverConfig.LoopbackClientConfig,
 		}
 
-		serviceResolver := buildServiceResolver(serverConfig.LoopbackClientConfig.Host, kubeInformerFactory)
+		serviceResolver := buildServiceResolver(
+			serverConfig.LoopbackClientConfig.Host,
+			kubeInformerFactory,
+		)
 		tp := oteltrace.NewNoopTracerProvider()
-		pluginInitializers, admissionPostStartHook, err := admissionConfig.New(proxyTransport, serverConfig.EgressSelector, serviceResolver, &tp)
+		pluginInitializers, admissionPostStartHook, err := admissionConfig.New(
+			proxyTransport,
+			serverConfig.EgressSelector,
+			serviceResolver,
+			&tp,
+		)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create admission plugin initializer: %v", err)
 		}
-		if err := serverConfig.AddPostStartHook("start-kube-apiserver-admission-initializer", admissionPostStartHook); err != nil {
+		if err := serverConfig.AddPostStartHook(
+			"start-kube-apiserver-admission-initializer",
+			admissionPostStartHook,
+		); err != nil {
 			return nil, err
 		}
 
@@ -99,7 +116,10 @@ func (o *ServerOptions) GenericConfig(tweakConfig func(config *genericapiserver.
 		&serverConfig.Config,
 		// o.RecommendedOptions.Etcd.ApplyTo,
 		func(cfg *genericapiserver.Config) error {
-			return o.RecommendedOptions.SecureServing.ApplyTo(&cfg.SecureServing, &cfg.LoopbackClientConfig)
+			return o.RecommendedOptions.SecureServing.ApplyTo(
+				&cfg.SecureServing,
+				&cfg.LoopbackClientConfig,
+			)
 		},
 		func(cfg *genericapiserver.Config) error {
 			return o.RecommendedOptions.Audit.ApplyTo(
@@ -114,7 +134,11 @@ func (o *ServerOptions) GenericConfig(tweakConfig func(config *genericapiserver.
 		return nil, err
 	}
 
-	_ = o.RecommendedOptions.Authentication.ApplyTo(&serverConfig.Authentication, serverConfig.Config.SecureServing, serverConfig.Config.OpenAPIConfig)
+	_ = o.RecommendedOptions.Authentication.ApplyTo(
+		&serverConfig.Authentication,
+		serverConfig.SecureServing,
+		serverConfig.OpenAPIConfig,
+	)
 	if tweakConfig != nil {
 		if err := tweakConfig(serverConfig); err != nil {
 			return nil, err
@@ -124,14 +148,23 @@ func (o *ServerOptions) GenericConfig(tweakConfig func(config *genericapiserver.
 	return serverConfig, nil
 }
 
-func (o *ServerOptions) RunServer(APIServerVersion *version.Info, stopCh <-chan struct{}, authorizer authorizer.Authorizer, tweakServerConfig func(config *genericapiserver.RecommendedConfig) error) error {
+func (o *ServerOptions) RunServer(
+	APIServerVersion *version.Info,
+	stopCh <-chan struct{},
+	authorizer authorizer.Authorizer,
+	tweakServerConfig func(config *genericapiserver.RecommendedConfig) error,
+) error {
 	aggregatedAPIServerConfig, err := o.GenericConfig(tweakServerConfig)
 	if err != nil {
 		return err
 	}
 
 	// aggregatedAPIServerConfig.EffectiveVersion = utilapiserverversion.DefaultComponentGlobalsRegistry.EffectiveVersionFor("loft-apiserver")
-	aggregatedAPIServerConfig.EffectiveVersion = compatibility.NewEffectiveVersionFromString(APIServerVersion.String(), "", "")
+	aggregatedAPIServerConfig.EffectiveVersion = compatibility.NewEffectiveVersionFromString(
+		APIServerVersion.String(),
+		"",
+		"",
+	)
 
 	// set the basics
 	genericConfig := &aggregatedAPIServerConfig.Config
@@ -139,7 +172,10 @@ func (o *ServerOptions) RunServer(APIServerVersion *version.Info, stopCh <-chan 
 	genericConfig.Authorization.Authorizer = authorizer
 
 	// set open api
-	genericConfig.OpenAPIConfig = genericapiserver.DefaultOpenAPIConfig(o.GetOpenAPIDefinitions, openapinamer.NewDefinitionNamer(builders.Scheme))
+	genericConfig.OpenAPIConfig = genericapiserver.DefaultOpenAPIConfig(
+		o.GetOpenAPIDefinitions,
+		openapinamer.NewDefinitionNamer(builders.Scheme),
+	)
 	genericConfig.OpenAPIConfig.Info.Title = "Api"
 	genericConfig.OpenAPIConfig.Info.Version = "v0"
 	if genericConfig.LongRunningFunc == nil {
@@ -189,7 +225,10 @@ func createNodeDialer() *http.Transport {
 	return proxyTransport
 }
 
-func buildServiceResolver(hostname string, informer informers.SharedInformerFactory) webhook.ServiceResolver {
+func buildServiceResolver(
+	hostname string,
+	informer informers.SharedInformerFactory,
+) webhook.ServiceResolver {
 	var serviceResolver webhook.ServiceResolver
 	serviceResolver = aggregatorapiserver.NewClusterIPServiceResolver(
 		informer.Core().V1().Services().Lister(),

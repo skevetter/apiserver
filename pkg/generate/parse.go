@@ -236,7 +236,7 @@ func (b *APIsBuilder) ParseAPIs() {
 }
 
 // ParseIndex indexes all types with the comment "// +resource=RESOURCE" by GroupVersionKind and
-// GroupKindVersion
+// GroupKindVersion.
 func (b *APIsBuilder) ParseIndex() {
 	b.ByGroupVersionKind = map[string]map[string]map[string]*APIResource{}
 	b.ByGroupKindVersion = map[string]map[string]map[string]*APIResource{}
@@ -347,12 +347,12 @@ func (b *APIsBuilder) GetSubresources(c *APIResource) map[string]*APISubresource
 	return r
 }
 
-// Returns true if the subresource Request type is in the same package as the resource type
+// Returns true if the subresource Request type is in the same package as the resource type.
 func (b *APIsBuilder) IsInPackage(tags SubresourceTags) bool {
 	return !strings.Contains(tags.RequestKind, ".")
 }
 
-// GetNameAndImport converts
+// GetNameAndImport converts.
 func (b *APIsBuilder) GetNameAndImport(tags SubresourceTags) (string, string) {
 	last := strings.LastIndex(tags.RequestKind, ".")
 	importPackage := tags.RequestKind[:last]
@@ -365,7 +365,7 @@ func (b *APIsBuilder) GetNameAndImport(tags SubresourceTags) (string, string) {
 	return strings.Join([]string{pkg, tags.RequestKind}, "."), importPackage
 }
 
-// ResourceTags contains the tags present in a "+resource=" comment
+// ResourceTags contains the tags present in a "+resource=" comment.
 type ResourceTags struct {
 	Resource   string
 	REST       string
@@ -374,10 +374,10 @@ type ResourceTags struct {
 	ShortName  string
 }
 
-// ParseResourceTag parses the tags in a "+resource=" comment into a ResourceTags struct
+// ParseResourceTag parses the tags in a "+resource=" comment into a ResourceTags struct.
 func ParseResourceTag(tag string) ResourceTags {
 	result := ResourceTags{}
-	for _, elem := range strings.Split(tag, ",") {
+	for elem := range strings.SplitSeq(tag, ",") {
 		kv := strings.Split(elem, "=")
 		if len(kv) != 2 {
 			klog.Fatalf("// +resource: tags must be key value pairs.  Expected "+
@@ -401,7 +401,7 @@ func ParseResourceTag(tag string) ResourceTags {
 	return result
 }
 
-// SubresourceTags contains the tags present in a "+subresource=" comment
+// SubresourceTags contains the tags present in a "+subresource=" comment.
 type SubresourceTags struct {
 	Path        string
 	Kind        string
@@ -409,10 +409,10 @@ type SubresourceTags struct {
 	REST        string
 }
 
-// ParseSubresourceTag parses the tags in a "+subresource=" comment into a SubresourceTags struct
+// ParseSubresourceTag parses the tags in a "+subresource=" comment into a SubresourceTags struct.
 func ParseSubresourceTag(c *APIResource, tag string) SubresourceTags {
 	result := SubresourceTags{}
-	for _, elem := range strings.Split(tag, ",") {
+	for elem := range strings.SplitSeq(tag, ",") {
 		kv := strings.Split(elem, "=")
 		if len(kv) != 2 {
 			klog.Fatalf("// +subresource: tags must be key value pairs.  Expected "+
@@ -435,7 +435,7 @@ func ParseSubresourceTag(c *APIResource, tag string) SubresourceTags {
 	return result
 }
 
-// GetResourceTag returns the value of the "+resource=" comment tag
+// GetResourceTag returns the value of the "+resource=" comment tag.
 func (b *APIsBuilder) GetResourceTag(c *types.Type) string {
 	comments := Comments(c.CommentLines)
 	resource := comments.GetTag("resource", ":")
@@ -471,7 +471,12 @@ func (b *APIsBuilder) GetControllerTag(c *types.Type) string {
 	if len(kbController) != 0 {
 		return kbController
 	}
-	panic(fmt.Errorf("Must specify +controller or +kubebuilder:controller comment for type %v", c.Name))
+	panic(
+		fmt.Errorf(
+			"Must specify +controller or +kubebuilder:controller comment for type %v",
+			c.Name,
+		),
+	)
 }
 
 func (b *APIsBuilder) GetSubresourceTags(c *types.Type) []string {
@@ -479,7 +484,7 @@ func (b *APIsBuilder) GetSubresourceTags(c *types.Type) []string {
 	return comments.GetTags("subresource", ":")
 }
 
-// ParseGroupNames initializes b.GroupNames with the set of all groups
+// ParseGroupNames initializes b.GroupNames with the set of all groups.
 func (b *APIsBuilder) ParseGroupNames() {
 	b.GroupNames = sets.String{}
 	for p := range b.UnversionedPkgs {
@@ -634,11 +639,20 @@ func (apigroup *APIGroup) DoType(t *types.Type) (*Struct, []*types.Type) {
 				if strings.HasPrefix(mSubType.Name.Package, "k8s.io/api/") {
 					// Import the package under an alias so it doesn't conflict with other groups
 					// having the same version
-					importAlias := path.Base(path.Dir(mSubType.Name.Package)) + path.Base(mSubType.Name.Package)
+					importAlias := path.Base(
+						path.Dir(mSubType.Name.Package),
+					) + path.Base(
+						mSubType.Name.Package,
+					)
 					uImport = fmt.Sprintf("%s \"%s\"", importAlias, mSubType.Name.Package)
 					if hasElem {
 						// Replace the full package with the alias when referring to the type
-						uType = strings.Replace(member.Type.String(), mSubType.Name.Package, importAlias, 1)
+						uType = strings.Replace(
+							member.Type.String(),
+							mSubType.Name.Package,
+							importAlias,
+							1,
+						)
 					} else {
 						// Replace the full package with the alias when referring to the type
 						uType = fmt.Sprintf("%s.%s", importAlias, parts[1])
@@ -647,7 +661,11 @@ func (apigroup *APIGroup) DoType(t *types.Type) (*Struct, []*types.Type) {
 					switch member.Type.Name.Package {
 					case "k8s.io/apimachinery/pkg/apis/meta/v1":
 						// Use versioned types for meta/v1
-						uImport = fmt.Sprintf("%s \"%s\"", "metav1", "k8s.io/apimachinery/pkg/apis/meta/v1")
+						uImport = fmt.Sprintf(
+							"%s \"%s\"",
+							"metav1",
+							"k8s.io/apimachinery/pkg/apis/meta/v1",
+						)
 						uType = "metav1." + parts[1]
 					default:
 						// Use unversioned types for everything else

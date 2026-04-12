@@ -40,8 +40,10 @@ func NewApiVersion(group, version string) *VersionedApiBuilder {
 }
 
 // WithResources adds new resource types and subresources to the API versions
-// resourceBuilders is a list of *versionedResourceBuilder
-func (s *VersionedApiBuilder) WithResources(resourceBuilders ...*versionedResourceBuilder) *VersionedApiBuilder {
+// resourceBuilders is a list of *versionedResourceBuilder.
+func (s *VersionedApiBuilder) WithResources(
+	resourceBuilders ...*versionedResourceBuilder,
+) *VersionedApiBuilder {
 	s.Kinds = append(s.Kinds, resourceBuilders...)
 	return s
 }
@@ -49,11 +51,11 @@ func (s *VersionedApiBuilder) WithResources(resourceBuilders ...*versionedResour
 // registerEndpoints registers the REST endpoints for all resources in this API group version
 // group is the group to register the resources under
 // optionsGetter is the RESTOptionsGetter provided by a server.Config
-// registry is the server.APIGroupInfo VersionedResourcesStorageMap used to register REST endpoints
+// registry is the server.APIGroupInfo VersionedResourcesStorageMap used to register REST endpoints.
 func (s *VersionedApiBuilder) registerEndpoints(
 	optionsGetter generic.RESTOptionsGetter,
-	registry map[string]map[string]rest.Storage) {
-
+	registry map[string]map[string]rest.Storage,
+) {
 	// Register the endpoints for each kind
 	for _, k := range s.Kinds {
 		if _, found := registry[s.GroupVersion.Version]; !found {
@@ -75,11 +77,13 @@ func NewApiGroup(group string) *UnVersionedApiBuilder {
 	b := &UnVersionedApiBuilder{
 		GroupVersion: schema.GroupVersion{Group: group, Version: runtime.APIVersionInternal},
 	}
-	//b.SchemaBuilder = runtime.NewSchemeBuilder(b.registerTypes)
+	// b.SchemaBuilder = runtime.NewSchemeBuilder(b.registerTypes)
 	return b
 }
 
-func (s *UnVersionedApiBuilder) WithKinds(kinds ...UnversionedResourceBuilder) *UnVersionedApiBuilder {
+func (s *UnVersionedApiBuilder) WithKinds(
+	kinds ...UnversionedResourceBuilder,
+) *UnVersionedApiBuilder {
 	s.Kinds = append(s.Kinds, kinds...)
 	return s
 }
@@ -105,7 +109,7 @@ func (s *UnVersionedApiBuilder) registerTypes(scheme *runtime.Scheme) error {
 		scheme.AddKnownTypes(s.GroupVersion, t)
 	}
 
-	//fmt.Printf("Registering for group %v\n", s.GroupVersion)
-	//metav1.AddToGroupVersion(scheme, s.GroupVersion)
+	// fmt.Printf("Registering for group %v\n", s.GroupVersion)
+	// metav1.AddToGroupVersion(scheme, s.GroupVersion)
 	return nil
 }

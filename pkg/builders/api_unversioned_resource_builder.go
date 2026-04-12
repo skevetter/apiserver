@@ -20,8 +20,11 @@ import (
 // NewInternalResource creates a new strategy for a resource
 // name - name of the resource - e.g. "deployments"
 // new - function for creating new empty UNVERSIONED instances - e.g. func() runtime.Object { return &Deployment{} }
-// newList - function for creating an empty list of UNVERSIONED instances - e.g. func() runtime.Object { return &DeploymentList{} }
-func NewInternalResource(name, kind string, new, newList func() runtime.Object) UnversionedResourceBuilder {
+// newList - function for creating an empty list of UNVERSIONED instances - e.g. func() runtime.Object { return &DeploymentList{} }.
+func NewInternalResource(
+	name, kind string,
+	new, newList func() runtime.Object,
+) UnversionedResourceBuilder {
 	return NewBuilder(name, kind, "", new, newList, true)
 }
 
@@ -30,16 +33,23 @@ func NewInternalResource(name, kind string, new, newList func() runtime.Object) 
 // new - function for creating new empty UNVERSIONED instances - e.g. func() runtime.Object { return &Deployment{} }
 // newList - function for creating an empty list of UNVERSIONED instances - e.g. func() runtime.Object { return &DeploymentList{} }
 // shortnames - shortnames of the resource - e.g. "deploy"
-// categories - categories of the resource - e.g. "aggregation"
-func NewInternalResourceWithShortcuts(name, kind string, new, newList func() runtime.Object, shortnames, categories []string) UnversionedResourceBuilder {
+// categories - categories of the resource - e.g. "aggregation".
+func NewInternalResourceWithShortcuts(
+	name, kind string,
+	new, newList func() runtime.Object,
+	shortnames, categories []string,
+) UnversionedResourceBuilder {
 	return NewBuilderWithShortcuts(name, kind, "", new, newList, true, shortnames, categories)
 }
 
 // NewInternalResourceStatus returns a new strategy for the status subresource of an object
 // name - name of the resource - e.g. "deployments"
 // new - function for creating new empty UNVERSIONED instances - e.g. func() runtime.Object { return &Deployment{} }
-// newList - function for creating an empty list of UNVERSIONED instances - e.g. func() runtime.Object { return &DeploymentList{} }
-func NewInternalResourceStatus(name, kind string, new, newList func() runtime.Object) UnversionedResourceBuilder {
+// newList - function for creating an empty list of UNVERSIONED instances - e.g. func() runtime.Object { return &DeploymentList{} }.
+func NewInternalResourceStatus(
+	name, kind string,
+	new, newList func() runtime.Object,
+) UnversionedResourceBuilder {
 	return NewBuilder(
 		name,
 		kind,
@@ -51,8 +61,11 @@ func NewInternalResourceStatus(name, kind string, new, newList func() runtime.Ob
 // NewInternalSubresource returns a new strategy for a subresource
 // name - name of the resource - e.g. "deployments"
 // path - path to the subresource - e.g. "scale"
-// new - function for creating new empty UNVERSIONED instances - e.g. func() runtime.Object { return &Deployment{} }
-func NewInternalSubresource(name, kind, path string, new func() runtime.Object) UnversionedResourceBuilder {
+// new - function for creating new empty UNVERSIONED instances - e.g. func() runtime.Object { return &Deployment{} }.
+func NewInternalSubresource(
+	name, kind, path string,
+	new func() runtime.Object,
+) UnversionedResourceBuilder {
 	return NewBuilder(
 		name,
 		kind,
@@ -66,8 +79,8 @@ func NewInternalSubresource(name, kind, path string, new func() runtime.Object) 
 func NewBuilder(
 	name, kind, path string,
 	new, newList func() runtime.Object,
-	useRegistryStore bool) UnversionedResourceBuilder {
-
+	useRegistryStore bool,
+) UnversionedResourceBuilder {
 	return &UnversionedResourceBuilderImpl{
 		Path:             path,
 		Name:             name,
@@ -82,8 +95,8 @@ func NewBuilderWithShortcuts(
 	name, kind, path string,
 	new, newList func() runtime.Object,
 	useRegistryStore bool,
-	shortnames, categories []string) UnversionedResourceBuilder {
-
+	shortnames, categories []string,
+) UnversionedResourceBuilder {
 	return &UnversionedResourceBuilderImpl{
 		Path:             path,
 		Name:             name,
@@ -167,11 +180,11 @@ func (b *UnversionedResourceBuilderImpl) GetCategories() []string {
 }
 
 type WithShortNames interface {
-	//AddShortName(shortName string)
+	// AddShortName(shortName string)
 	GetShortNames() []string
 }
 
 type WithCategories interface {
-	//AddCategory(category string)
+	// AddCategory(category string)
 	GetCategories() []string
 }

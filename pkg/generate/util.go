@@ -8,7 +8,7 @@ import (
 	"k8s.io/gengo/v2/types"
 )
 
-// IsAPIResource returns true if t has a +resource comment tag
+// IsAPIResource returns true if t has a +resource comment tag.
 func IsAPIResource(t *types.Type) bool {
 	for _, c := range t.CommentLines {
 		if strings.Contains(c, "+resource") || strings.Contains(c, "+kubebuilder:resource") {
@@ -18,7 +18,7 @@ func IsAPIResource(t *types.Type) bool {
 	return false
 }
 
-// IsNonNamespaced returns true if t has a +nonNamespaced comment tag
+// IsNonNamespaced returns true if t has a +nonNamespaced comment tag.
 func IsNonNamespaced(t *types.Type) bool {
 	if !IsAPIResource(t) {
 		return false
@@ -39,7 +39,7 @@ func IsNonNamespaced(t *types.Type) bool {
 	return false
 }
 
-// IsAPISubresource returns true if t has a +subresource-request comment tag
+// IsAPISubresource returns true if t has a +subresource-request comment tag.
 func IsAPISubresource(t *types.Type) bool {
 	for _, c := range t.CommentLines {
 		if strings.Contains(c, "+subresource-request") {
@@ -49,7 +49,7 @@ func IsAPISubresource(t *types.Type) bool {
 	return false
 }
 
-// HasSubresource returns true if t is an APIResource with one or more Subresources
+// HasSubresource returns true if t is an APIResource with one or more Subresources.
 func HasSubresource(t *types.Type) bool {
 	if !IsAPIResource(t) {
 		return false
@@ -95,16 +95,16 @@ func GetKind(t *types.Type, group string) string {
 	return t.Name.Name
 }
 
-// IsApisDir returns true if a directory path is a Kubernetes api directory
+// IsApisDir returns true if a directory path is a Kubernetes api directory.
 func IsApisDir(dir string) bool {
 	return dir == "apis" || dir == "api"
 }
 
-// Comments is a structure for using comment tags on go structs and fields
+// Comments is a structure for using comment tags on go structs and fields.
 type Comments []string
 
 // GetTags returns the value for the first comment with a prefix matching "+name="
-// e.g. "+name=foo\n+name=bar" would return "foo"
+// e.g. "+name=foo\n+name=bar" would return "foo".
 func (c Comments) GetTag(name, sep string) string {
 	for _, c := range c {
 		prefix := fmt.Sprintf("+%s%s", name, sep)
@@ -126,7 +126,7 @@ func (c Comments) HasTag(name string) bool {
 }
 
 // GetTags returns the value for all comments with a prefix and separator.  E.g. for "name" and "="
-// "+name=foo\n+name=bar" would return []string{"foo", "bar"}
+// "+name=foo\n+name=bar" would return []string{"foo", "bar"}.
 func (c Comments) GetTags(name, sep string) []string {
 	tags := []string{}
 	for _, c := range c {
