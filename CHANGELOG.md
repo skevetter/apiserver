@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/skevetter/apiserver/compare/v1.0.0...v1.0.1) (2026-04-12)
+
+
+### Bug Fixes
+
+* move exclude-dirs to linters.exclusions.paths for golangci-lint v2 ([#10](https://github.com/skevetter/apiserver/issues/10)) ([5539adf](https://github.com/skevetter/apiserver/commit/5539adf2f95d4e6e3dea41a7ee6b600e44cf96a4))
+
 ## 1.0.0 (2026-04-12)
 
 
