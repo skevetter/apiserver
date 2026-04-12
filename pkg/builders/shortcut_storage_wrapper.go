@@ -15,8 +15,10 @@ package builders
 
 import "k8s.io/apiserver/pkg/registry/rest"
 
-var _ rest.ShortNamesProvider = &StorageWrapperWithShortcuts{}
-var _ rest.CategoriesProvider = &StorageWrapperWithShortcuts{}
+var (
+	_ rest.ShortNamesProvider = &StorageWrapperWithShortcuts{}
+	_ rest.CategoriesProvider = &StorageWrapperWithShortcuts{}
+)
 
 type StorageWrapperWithShortcuts struct {
 	*StorageWrapper

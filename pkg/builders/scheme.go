@@ -22,13 +22,13 @@ import (
 // Scheme is the default instance of runtime.Scheme to which types in the Kubernetes API are already registered.
 var Scheme = runtime.NewScheme()
 
-// Codecs provides access to encoding and decoding for the scheme
+// Codecs provides access to encoding and decoding for the scheme.
 var Codecs = serializer.NewCodecFactory(Scheme)
 
-// ParameterScheme is a scheme dedicated for registering parameters
+// ParameterScheme is a scheme dedicated for registering parameters.
 var ParameterScheme = runtime.NewScheme()
 
-// ParameterCodec is a codec for decoding parameters
+// ParameterCodec is a codec for decoding parameters.
 var ParameterCodec = runtime.NewParameterCodec(ParameterScheme)
 
 func init() {

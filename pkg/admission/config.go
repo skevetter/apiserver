@@ -19,8 +19,6 @@ import (
 	"time"
 
 	"go.opentelemetry.io/otel/trace"
-	"k8s.io/klog/v2"
-
 	utilwait "k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/apiserver/pkg/admission"
 	webhookinit "k8s.io/apiserver/pkg/admission/plugin/webhook/initializer"
@@ -32,26 +30,44 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/restmapper"
+	"k8s.io/klog/v2"
 )
 
-// Config holds the configuration needed to for initialize the admission plugins
+// Config holds the configuration needed to for initialize the admission plugins.
 type Config struct {
 	CloudConfigFile      string
 	LoopbackClientConfig *rest.Config
 	ExternalInformers    externalinformers.SharedInformerFactory
 }
 
-// New sets up the plugins and admission start hooks needed for admission
-func (c *Config) New(proxyTransport *http.Transport, egressSelector *egressselector.EgressSelector, serviceResolver webhook.ServiceResolver, tp *trace.TracerProvider) ([]admission.PluginInitializer, genericapiserver.PostStartHookFunc, error) {
-	webhookAuthResolverWrapper := webhook.NewDefaultAuthenticationInfoResolverWrapper(proxyTransport, egressSelector, c.LoopbackClientConfig, *tp)
-	webhookPluginInitializer := webhookinit.NewPluginInitializer(webhookAuthResolverWrapper, serviceResolver)
+// New sets up the plugins and admission start hooks needed for admission.
+func (c *Config) New(
+	proxyTransport *http.Transport,
+	egressSelector *egressselector.EgressSelector,
+	serviceResolver webhook.ServiceResolver,
+	tp *trace.TracerProvider,
+) ([]admission.PluginInitializer, genericapiserver.PostStartHookFunc, error) {
+	webhookAuthResolverWrapper := webhook.NewDefaultAuthenticationInfoResolverWrapper(
+		proxyTransport,
+		egressSelector,
+		c.LoopbackClientConfig,
+		*tp,
+	)
+	webhookPluginInitializer := webhookinit.NewPluginInitializer(
+		webhookAuthResolverWrapper,
+		serviceResolver,
+	)
 
 	var cloudConfig []byte
 	if c.CloudConfigFile != "" {
 		var err error
 		cloudConfig, err = os.ReadFile(c.CloudConfigFile)
 		if err != nil {
-			klog.Fatalf("Error reading from cloud configuration file %s: %#v", c.CloudConfigFile, err)
+			klog.Fatalf(
+				"Error reading from cloud configuration file %s: %#v",
+				c.CloudConfigFile,
+				err,
+			)
 		}
 	}
 	clientset, err := kubernetes.NewForConfig(c.LoopbackClientConfig)
@@ -73,5 +89,8 @@ func (c *Config) New(proxyTransport *http.Transport, egressSelector *egressselec
 		return nil
 	}
 
-	return []admission.PluginInitializer{webhookPluginInitializer, kubePluginInitializer}, admissionPostStartHook, nil
+	return []admission.PluginInitializer{
+		webhookPluginInitializer,
+		kubePluginInitializer,
+	}, admissionPostStartHook, nil
 }

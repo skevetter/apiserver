@@ -28,9 +28,11 @@ import (
 	"k8s.io/apiserver/pkg/storage/names"
 )
 
-var _ rest.RESTCreateStrategy = &DefaultStorageStrategy{}
-var _ rest.RESTDeleteStrategy = &DefaultStorageStrategy{}
-var _ rest.RESTUpdateStrategy = &DefaultStorageStrategy{}
+var (
+	_ rest.RESTCreateStrategy = &DefaultStorageStrategy{}
+	_ rest.RESTDeleteStrategy = &DefaultStorageStrategy{}
+	_ rest.RESTUpdateStrategy = &DefaultStorageStrategy{}
+)
 
 var StorageStrategySingleton = DefaultStorageStrategy{
 	Scheme,
@@ -54,8 +56,12 @@ func (DefaultStorageStrategy) ObjectNameFunc(obj runtime.Object) (string, error)
 	}
 }
 
-// Build sets the strategy for the store
-func (DefaultStorageStrategy) Build(builder StorageBuilder, store *StorageWrapper, options *generic.StoreOptions) {
+// Build sets the strategy for the store.
+func (DefaultStorageStrategy) Build(
+	builder StorageBuilder,
+	store *StorageWrapper,
+	options *generic.StoreOptions,
+) {
 	store.PredicateFunc = builder.BasicMatch
 	store.ObjectNameFunc = builder.ObjectNameFunc
 	store.CreateStrategy = builder
@@ -104,7 +110,10 @@ func (DefaultStorageStrategy) Validate(ctx context.Context, obj runtime.Object) 
 	return field.ErrorList{}
 }
 
-func (DefaultStorageStrategy) ValidateUpdate(ctx context.Context, obj, old runtime.Object) field.ErrorList {
+func (DefaultStorageStrategy) ValidateUpdate(
+	ctx context.Context,
+	obj, old runtime.Object,
+) field.ErrorList {
 	return field.ErrorList{}
 }
 
@@ -132,7 +141,10 @@ func (DefaultStorageStrategy) GetSelectableFields(obj HasObjectMeta) fields.Set 
 
 // MatchResource is the filter used by the generic etcd backend to watch events
 // from etcd to clients of the apiserver only interested in specific labels/fields.
-func (b DefaultStorageStrategy) BasicMatch(label labels.Selector, field fields.Selector) storage.SelectionPredicate {
+func (b DefaultStorageStrategy) BasicMatch(
+	label labels.Selector,
+	field fields.Selector,
+) storage.SelectionPredicate {
 	return storage.SelectionPredicate{
 		Label:    label,
 		Field:    field,
@@ -140,7 +152,10 @@ func (b DefaultStorageStrategy) BasicMatch(label labels.Selector, field fields.S
 	}
 }
 
-func (*DefaultStorageStrategy) WarningsOnUpdate(ctx context.Context, obj, old runtime.Object) []string {
+func (*DefaultStorageStrategy) WarningsOnUpdate(
+	ctx context.Context,
+	obj, old runtime.Object,
+) []string {
 	return nil
 }
 

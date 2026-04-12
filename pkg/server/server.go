@@ -19,26 +19,24 @@ package apiserver
 import (
 	"flag"
 
+	"github.com/skevetter/apiserver/pkg/builders"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/version"
-	"k8s.io/apiserver/pkg/authorization/authorizer"
-	"k8s.io/klog/v2"
-
 	"k8s.io/apiserver/pkg/admission"
 	admissionmetrics "k8s.io/apiserver/pkg/admission/metrics"
 	"k8s.io/apiserver/pkg/admission/plugin/namespace/lifecycle"
 	mutatingwebhook "k8s.io/apiserver/pkg/admission/plugin/webhook/mutating"
 	validatingwebhook "k8s.io/apiserver/pkg/admission/plugin/webhook/validating"
+	"k8s.io/apiserver/pkg/authorization/authorizer"
 	genericapiserver "k8s.io/apiserver/pkg/server"
 	genericoptions "k8s.io/apiserver/pkg/server/options"
 	"k8s.io/apiserver/pkg/util/feature"
+	"k8s.io/klog/v2"
 	openapi "k8s.io/kube-openapi/pkg/common"
-
-	"github.com/skevetter/apiserver/pkg/builders"
 )
 
 type StartOptions struct {
@@ -71,7 +69,10 @@ func StartAPIServer(opts *StartOptions) error {
 	return nil
 }
 
-func newAPIServerCommand(opts *StartOptions, stopChan <-chan struct{}) (*cobra.Command, *ServerOptions) {
+func newAPIServerCommand(
+	opts *StartOptions,
+	stopChan <-chan struct{},
+) (*cobra.Command, *ServerOptions) {
 	o := newAPIServerOptions(opts.Apis)
 	o.GetOpenAPIDefinitions = opts.GetOpenAPIDefinitions
 
@@ -103,9 +104,12 @@ func newAPIServerOptions(b []*builders.APIGroupBuilder) *ServerOptions {
 		versions = append(versions, b.GetLegacyCodec()...)
 	}
 
-	builders.Codecs = serializer.NewCodecFactory(builders.Scheme, func(options *serializer.CodecFactoryOptions) {
-		options.Strict = true
-	})
+	builders.Codecs = serializer.NewCodecFactory(
+		builders.Scheme,
+		func(options *serializer.CodecFactoryOptions) {
+			options.Strict = true
+		},
+	)
 	o := &ServerOptions{
 		RecommendedOptions: genericoptions.NewRecommendedOptions(
 			"",
@@ -117,14 +121,19 @@ func newAPIServerOptions(b []*builders.APIGroupBuilder) *ServerOptions {
 	// we don't use etcd
 	o.RecommendedOptions.Etcd = nil
 	o.RecommendedOptions.Admission = NewAdmissionOptions()
-	o.RecommendedOptions.Admission.DefaultOffPlugins = sets.Set[string]{lifecycle.PluginName: sets.Empty{}}
+	o.RecommendedOptions.Admission.DefaultOffPlugins = sets.Set[string]{
+		lifecycle.PluginName: sets.Empty{},
+	}
 
 	o.RecommendedOptions.Authorization.RemoteKubeConfigFileOptional = true
 	o.RecommendedOptions.Authentication.RemoteKubeConfigFileOptional = true
 	return o
 }
 
-func applyOptions(config *genericapiserver.Config, applyTo ...func(*genericapiserver.Config) error) error {
+func applyOptions(
+	config *genericapiserver.Config,
+	applyTo ...func(*genericapiserver.Config) error,
+) error {
 	for _, fn := range applyTo {
 		if err := fn(config); err != nil {
 			return err
@@ -135,18 +144,24 @@ func applyOptions(config *genericapiserver.Config, applyTo ...func(*genericapise
 }
 
 // NewAdmissionOptions creates a new instance of AdmissionOptions
-// this is eidentical to the options created by upstream apiserver, but omits validatingadmissionpoicy
+// this is eidentical to the options created by upstream apiserver, but omits validatingadmissionpoicy.
 func NewAdmissionOptions() *genericoptions.AdmissionOptions {
 	options := &genericoptions.AdmissionOptions{
-		Plugins:    admission.NewPlugins(),
-		Decorators: admission.Decorators{admission.DecoratorFunc(admissionmetrics.WithControllerMetrics)},
+		Plugins: admission.NewPlugins(),
+		Decorators: admission.Decorators{
+			admission.DecoratorFunc(admissionmetrics.WithControllerMetrics),
+		},
 		// This list is mix of mutating admission plugins and validating
 		// admission plugins. The apiserver always runs the validating ones
 		// after all the mutating ones, so their relative order in this list
 		// doesn't matter.
 		// We override this field to omit validatingadmsionpolicies
-		RecommendedPluginOrder: []string{lifecycle.PluginName, mutatingwebhook.PluginName, validatingwebhook.PluginName},
-		DefaultOffPlugins:      sets.Set[string]{},
+		RecommendedPluginOrder: []string{
+			lifecycle.PluginName,
+			mutatingwebhook.PluginName,
+			validatingwebhook.PluginName,
+		},
+		DefaultOffPlugins: sets.Set[string]{},
 	}
 	genericapiserver.RegisterAllAdmissionPlugins(options.Plugins)
 	return options

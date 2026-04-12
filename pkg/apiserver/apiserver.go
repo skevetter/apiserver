@@ -29,7 +29,10 @@ type Server struct {
 }
 
 // NewServer returns a new instance of Server from the given config.
-func NewServer(recommendedConfig *genericapiserver.RecommendedConfig, apis []*builders.APIGroupBuilder) (*Server, error) {
+func NewServer(
+	recommendedConfig *genericapiserver.RecommendedConfig,
+	apis []*builders.APIGroupBuilder,
+) (*Server, error) {
 	localSchemeBuilder := runtime.NewSchemeBuilder()
 	for _, groupBuilder := range apis {
 		localSchemeBuilder.Register(groupBuilder.AddToScheme)
@@ -52,7 +55,8 @@ func NewServer(recommendedConfig *genericapiserver.RecommendedConfig, apis []*bu
 	)
 
 	genericServer, err := recommendedConfig.Config.Complete(recommendedConfig.SharedInformerFactory).
-		New("aggregated-apiserver", genericapiserver.NewEmptyDelegate()) // completion is done in Complete, no need for a second time
+		New("aggregated-apiserver", genericapiserver.NewEmptyDelegate())
+		// completion is done in Complete, no need for a second time
 	if err != nil {
 		return nil, err
 	}
@@ -100,13 +104,20 @@ func (pss *protocolShieldSerializers) SupportedMediaTypes() []runtime.Serializer
 	return pss.accepts
 }
 
-func (pss *protocolShieldSerializers) EncoderForVersion(encoder runtime.Encoder, gv runtime.GroupVersioner) runtime.Encoder {
+func (pss *protocolShieldSerializers) EncoderForVersion(
+	encoder runtime.Encoder,
+	gv runtime.GroupVersioner,
+) runtime.Encoder {
 	if pss == nil {
 		return nil
 	}
 	return pss.CodecForVersions(encoder, nil, gv, nil)
 }
-func (pss *protocolShieldSerializers) DecoderToVersion(decoder runtime.Decoder, gv runtime.GroupVersioner) runtime.Decoder {
+
+func (pss *protocolShieldSerializers) DecoderToVersion(
+	decoder runtime.Decoder,
+	gv runtime.GroupVersioner,
+) runtime.Decoder {
 	if pss == nil {
 		return nil
 	}

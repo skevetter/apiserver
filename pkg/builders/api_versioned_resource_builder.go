@@ -36,12 +36,12 @@ type NewRESTFunc func(getter generic.RESTOptionsGetter) rest.Storage
 // strategy - unversionedBuilder from calling NewUnversionedXXX()
 // new - function for creating new empty VERSIONED instances - e.g. func() runtime.Object { return &Deployment{} }
 // newList - function for creating an empty list of VERSIONED instances - e.g. func() runtime.Object { return &DeploymentList{} }
-// storeBuilder - builder for creating the store
+// storeBuilder - builder for creating the store.
 func NewApiResource(
 	unversionedBuilder UnversionedResourceBuilder,
 	new, newList func() runtime.Object,
-	storeBuilder StorageBuilder) *versionedResourceBuilder {
-
+	storeBuilder StorageBuilder,
+) *versionedResourceBuilder {
 	return &versionedResourceBuilder{
 		unversionedBuilder, new, newList, storeBuilder, nil, nil,
 	}
@@ -51,11 +51,12 @@ func NewApiResource(
 // does not require standard storage (e.g. subresources reuses the storage for the parent resource).
 // strategy - unversionedBuilder from calling NewUnversionedXXX()
 // new - function for creating new empty VERSIONED instances - e.g. func() runtime.Object { return &Deployment{} }
-// storage - storage for manipulating the resource
+// storage - storage for manipulating the resource.
 func NewApiResourceWithStorage(
 	unversionedBuilder UnversionedResourceBuilder,
 	new, newList func() runtime.Object,
-	RESTFunc NewRESTFunc) *versionedResourceBuilder {
+	RESTFunc NewRESTFunc,
+) *versionedResourceBuilder {
 	v := &versionedResourceBuilder{
 		unversionedBuilder, new, newList, nil, RESTFunc, nil,
 	}
@@ -104,14 +105,19 @@ type StorageWrapper struct {
 	registry.Store
 }
 
-func (s StorageWrapper) Create(ctx context.Context, obj runtime.Object, createValidation rest.ValidateObjectFunc, options *metav1.CreateOptions) (runtime.Object, error) {
+func (s StorageWrapper) Create(
+	ctx context.Context,
+	obj runtime.Object,
+	createValidation rest.ValidateObjectFunc,
+	options *metav1.CreateOptions,
+) (runtime.Object, error) {
 	return s.Store.Create(ctx, obj, createValidation, options)
 }
 
 func (b *versionedResourceBuilder) Build(
 	group string,
-	optionsGetter generic.RESTOptionsGetter) rest.StandardStorage {
-
+	optionsGetter generic.RESTOptionsGetter,
+) rest.StandardStorage {
 	// Set a default strategy
 	store := &StorageWrapper{
 		registry.Store{
@@ -156,21 +162,20 @@ func (b *versionedResourceBuilder) GetStandardStorage() rest.StandardStorage {
 }
 
 // getGroupResource returns the GroupResource for this Resource and the provided Group
-// group is the group the resource belongs to
+// group is the group the resource belongs to.
 func (b *versionedResourceBuilder) getGroupResource(group string) schema.GroupResource {
 	return schema.GroupResource{Group: group, Resource: b.Unversioned.GetName()}
-
 }
 
 // registerEndpoints registers the REST endpoints for this resource in the registry
 // group is the group to register the resource under
 // optionsGetter is the RESTOptionsGetter provided by a server.Config
-// registry is the server.APIGroupInfo VersionedResourcesStorageMap used to register REST endpoints
+// registry is the server.APIGroupInfo VersionedResourcesStorageMap used to register REST endpoints.
 func (b *versionedResourceBuilder) registerEndpoints(
 	group string,
 	optionsGetter generic.RESTOptionsGetter,
-	registry map[string]rest.Storage) {
-
+	registry map[string]rest.Storage,
+) {
 	// Register the endpoint
 	path := b.Unversioned.GetPath()
 	if len(path) > 0 {

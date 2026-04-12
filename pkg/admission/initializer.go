@@ -57,7 +57,7 @@ func NewPluginInitializer(
 }
 
 // Initialize checks the initialization interfaces implemented by each plugin
-// and provide the appropriate initialization data
+// and provide the appropriate initialization data.
 func (i *PluginInitializer) Initialize(plugin admission.Interface) {
 	if wants, ok := plugin.(WantsCloudConfig); ok {
 		wants.SetCloudConfig(i.cloudConfig)

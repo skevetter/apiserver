@@ -52,7 +52,7 @@ func (g *APIGroupBuilder) WithRootScopedKinds(kinds ...string) *APIGroupBuilder 
 	return g
 }
 
-// GetVersionPreferenceOrder returns the preferred ordering of versions for this api group
+// GetVersionPreferenceOrder returns the preferred ordering of versions for this api group.
 func (g *APIGroupBuilder) GetVersionPreferenceOrder() []string {
 	order := []string{}
 	for _, v := range g.Versions {
@@ -71,8 +71,8 @@ func (g *APIGroupBuilder) GetLegacyCodec() []schema.GroupVersion {
 
 func (g *APIGroupBuilder) registerEndpoints(
 	optionsGetter generic.RESTOptionsGetter,
-	registry map[string]map[string]rest.Storage) {
-
+	registry map[string]map[string]rest.Storage,
+) {
 	// Register the endpoints for each version
 	for _, v := range g.Versions {
 		v.registerEndpoints(optionsGetter, registry)
@@ -87,9 +87,10 @@ func (g *APIGroupBuilder) registerVersionPriorities(scheme *runtime.Scheme) erro
 	return scheme.SetVersionPriority(gvs...)
 }
 
-// Build returns a new NewDefaultAPIGroupInfo to install into a GenericApiServer
-func (g *APIGroupBuilder) Build(optionsGetter generic.RESTOptionsGetter) *genericapiserver.APIGroupInfo {
-
+// Build returns a new NewDefaultAPIGroupInfo to install into a GenericApiServer.
+func (g *APIGroupBuilder) Build(
+	optionsGetter generic.RESTOptionsGetter,
+) *genericapiserver.APIGroupInfo {
 	// Build a new group
 	i := genericapiserver.NewDefaultAPIGroupInfo(
 		g.Name,
