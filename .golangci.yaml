@@ -2,8 +2,6 @@ version: "2"
 run:
   timeout: 5m
   concurrency: 8
-  exclude-dirs:
-    - example
 formatters:
   enable:
     - gci
@@ -14,6 +12,9 @@ formatters:
     paths:
       - example
 linters:
+  exclusions:
+    paths:
+      - example
   enable:
     - cyclop
     - decorder
