@@ -56,6 +56,7 @@ func NewServer(
 
 	genericServer, err := recommendedConfig.Config.Complete(recommendedConfig.SharedInformerFactory).
 		New("aggregated-apiserver", genericapiserver.NewEmptyDelegate())
+
 		// completion is done in Complete, no need for a second time
 	if err != nil {
 		return nil, err
