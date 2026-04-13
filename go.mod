@@ -112,7 +112,4 @@ require (
 	sigs.k8s.io/yaml v1.6.0 // indirect
 )
 
-replace (
-	k8s.io/apiserver => github.com/loft-sh/k8s-apiserver v0.35.0-loft.0
-	k8s.io/client-go => github.com/loft-sh/k8s-client-go v0.35.0-loft.0
-)
+replace k8s.io/apiserver => github.com/skevetter/k8s-apiserver v0.35.0-devsy.0
