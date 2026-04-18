@@ -42,6 +42,9 @@ type APIGroup struct {
 	Aliases map[string]*Alias
 	Pkg     *types.Package
 	PkgPath string
+
+	// importAliases tracks import alias → package path to detect and resolve collisions.
+	importAliases map[string]string
 }
 
 type Struct struct {
@@ -191,6 +194,7 @@ func (b *APIsBuilder) ParseAPIs() {
 			Versions:             map[string]*APIVersion{},
 			UnversionedResources: map[string]*APIResource{},
 			Aliases:              map[string]*Alias{},
+			importAliases:        map[string]string{},
 		}
 
 		for version, kindMap := range versionMap {
@@ -639,11 +643,7 @@ func (apigroup *APIGroup) DoType(t *types.Type) (*Struct, []*types.Type) {
 				if strings.HasPrefix(mSubType.Name.Package, "k8s.io/api/") {
 					// Import the package under an alias so it doesn't conflict with other groups
 					// having the same version
-					importAlias := path.Base(
-						path.Dir(mSubType.Name.Package),
-					) + path.Base(
-						mSubType.Name.Package,
-					)
+					importAlias := apigroup.resolveImportAlias(mSubType.Name.Package)
 					uImport = fmt.Sprintf("%s \"%s\"", importAlias, mSubType.Name.Package)
 					if hasElem {
 						// Replace the full package with the alias when referring to the type
@@ -683,42 +683,22 @@ func (apigroup *APIGroup) DoType(t *types.Type) (*Struct, []*types.Type) {
 							name := str[endPkg+1:]
 							prefix := str[:startPkg+1]
 
-							uImportBase := path.Base(pkg)
-							uImportName := path.Base(path.Dir(pkg)) + uImportBase
+							uImportName := apigroup.resolveImportAlias(pkg)
 							uImport = fmt.Sprintf("%s \"%s\"", uImportName, pkg)
 
 							uType = prefix + uImportName + "." + name
-
-							// fmt.Printf("\nDifferent Parent Package: %s\nChild Package: %s\nKind: %s (Kind.String() %s)\nImport stmt: %s\nType: %s\n\n",
-							//	pkg,
-							//	member.Type.Name.Package,
-							//	member.Type.Kind,
-							//	member.Type.String(),
-							//	uImport,
-							//	uType)
 						} else {
 							// Handle non- Pointer, Maps, Slices
 							pkg := t.Name.Package
 							name := t.Name.Name
 
-							// Come up with the alias the package is imported under
-							// Concatenate with directory package to reduce naming collisions
-							uImportBase := path.Base(pkg)
-							uImportName := path.Base(path.Dir(pkg)) + uImportBase
+							uImportName := apigroup.resolveImportAlias(pkg)
 
 							// Create the import statement
 							uImport = fmt.Sprintf("%s \"%s\"", uImportName, pkg)
 
 							// Create the field type name - should be <pkgalias>.<TypeName>
 							uType = uImportName + "." + name
-
-							// fmt.Printf("\nDifferent Parent Package: %s\nChild Package: %s\nKind: %s (Kind.String() %s)\nImport stmt: %s\nType: %s\n\n",
-							//	pkg,
-							//	member.Type.Name.Package,
-							//	member.Type.Kind,
-							//	member.Type.String(),
-							//	uImport,
-							//	uType)
 						}
 					}
 				}
@@ -757,4 +737,38 @@ func (apigroup *APIGroup) DoType(t *types.Type) (*Struct, []*types.Type) {
 		}
 	}
 	return s, remaining
+}
+
+// resolveImportAlias returns a unique import alias for the given package path.
+// The base alias is formed from the last two path segments (e.g. "storage/v1" → "storagev1").
+// If that alias is already used by a different package, the module name (third path segment)
+// is prepended to disambiguate (e.g. "agentstoragev1").
+func (g *APIGroup) resolveImportAlias(pkgPath string) string {
+	base := path.Base(path.Dir(pkgPath)) + path.Base(pkgPath)
+
+	if existing, ok := g.importAliases[base]; ok && existing == pkgPath {
+		return base
+	}
+
+	if _, ok := g.importAliases[base]; !ok {
+		g.importAliases[base] = pkgPath
+		return base
+	}
+
+	// Collision: disambiguate using the module name (third segment of the import path).
+	parts := strings.Split(pkgPath, "/")
+	moduleName := ""
+	if len(parts) >= 3 {
+		moduleName = parts[2]
+	}
+	prefix := strings.ReplaceAll(moduleName, "-", "")
+	prefix = strings.TrimSuffix(prefix, "apis")
+	prefix = strings.TrimSuffix(prefix, "api")
+	if prefix == "" || prefix == base {
+		prefix = strings.ReplaceAll(moduleName, "-", "")
+	}
+
+	alias := prefix + base
+	g.importAliases[alias] = pkgPath
+	return alias
 }
