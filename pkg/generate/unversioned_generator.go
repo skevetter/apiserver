@@ -167,7 +167,7 @@ type {{ $a.Name }} {{ $a.UnderlyingTypeName }}
 {{ range $s := .Structs -}}
 {{ if $s.GenUnversioned -}}
 {{ if $s.GenClient }}// +genclient{{end}}
-{{ if $s.GenClient }}// +genclient{{ if $s.NonNamespaced }}:nonNamespaced{{end}}{{end}}
+{{ if and $s.GenClient $s.NonNamespaced }}// +genclient:nonNamespaced{{end}}
 {{ if $s.GenDeepCopy }}// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object{{end}}
 
 type {{ $s.Name }} struct {

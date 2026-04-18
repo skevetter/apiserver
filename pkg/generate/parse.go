@@ -579,9 +579,7 @@ func (b *APIsBuilder) ParseStructsAndAliases(apigroup *APIGroup) {
 			result.GenDeepCopy = true
 		}
 
-		if next.Resource != nil {
-			result.NonNamespaced = IsNonNamespaced(next.Type)
-		}
+		result.NonNamespaced = IsNonNamespaced(next.Type)
 
 		if b.GenDeepCopy(next.Type) {
 			result.GenDeepCopy = true
