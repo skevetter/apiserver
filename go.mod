@@ -112,4 +112,4 @@ require (
 	sigs.k8s.io/yaml v1.6.0 // indirect
 )
 
-replace k8s.io/apiserver => github.com/skevetter/k8s-apiserver v0.35.3-devsy.0
+replace k8s.io/apiserver => github.com/devsy-org/k8s-apiserver v0.35.3-devsy.0

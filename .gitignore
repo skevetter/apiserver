@@ -1,6 +1,6 @@
 .idea/
 /test
-/example/src/github.com/loft-sh/test/vendor
+/example/src/github.com/devsy/test/vendor
 /generator
 apiserver.local.config/
 violations.report

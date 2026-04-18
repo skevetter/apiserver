@@ -159,7 +159,7 @@ func (o *ServerOptions) RunServer(
 		return err
 	}
 
-	// aggregatedAPIServerConfig.EffectiveVersion = utilapiserverversion.DefaultComponentGlobalsRegistry.EffectiveVersionFor("loft-apiserver")
+	// aggregatedAPIServerConfig.EffectiveVersion = utilapiserverversion.DefaultComponentGlobalsRegistry.EffectiveVersionFor("devsy-apiserver")
 	aggregatedAPIServerConfig.EffectiveVersion = compatibility.NewEffectiveVersionFromString(
 		APIServerVersion.String(),
 		"",

@@ -27,7 +27,7 @@ func GetAllApiBuilders() []*builders.APIGroupBuilder {
 
 func GetTestAPIBuilder() *builders.APIGroupBuilder {
 	return builders.NewApiGroupBuilder(
-		"test.loft.sh",
+		"test.devsy.sh",
 		"github.com/devsy/test/apis/test").
 		WithUnVersionedApi(test.ApiVersion).
 		WithVersionedApis(

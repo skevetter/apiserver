@@ -1,4 +1,4 @@
 //
-// +domain=loft.sh
+// +domain=devsy.sh
 
 package apis

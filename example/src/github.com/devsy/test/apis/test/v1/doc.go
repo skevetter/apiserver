@@ -6,5 +6,5 @@
 // +k8s:deepcopy-gen=package,register
 // +k8s:conversion-gen=github.com/devsy/test/apis/test
 // +k8s:defaulter-gen=TypeMeta
-// +groupName=test.loft.sh
+// +groupName=test.devsy.sh
 package v1 // import "github.com/devsy/test/apis/test/v1"

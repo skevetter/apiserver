@@ -1,9 +1,9 @@
-module github.com/loft-sh/test
+module github.com/devsy-sh/test
 
 go 1.25.0
 
 require (
-	github.com/loft-sh/apiserver v0.0.0
+	github.com/devsy-sh/apiserver v0.0.0
 	k8s.io/apimachinery v0.35.0
 	k8s.io/apiserver v0.35.0
 	k8s.io/client-go v0.35.0
@@ -114,4 +114,4 @@ require (
 	sigs.k8s.io/yaml v1.6.0 // indirect
 )
 
-replace github.com/loft-sh/apiserver => ../../../../../
+replace github.com/devsy-sh/apiserver => ../../../../../

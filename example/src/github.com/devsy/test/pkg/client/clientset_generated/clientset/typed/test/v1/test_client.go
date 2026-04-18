@@ -15,7 +15,7 @@ type TestV1Interface interface {
 	ClusterRolesGetter
 }
 
-// TestV1Client is used to interact with features provided by the test.loft.sh group.
+// TestV1Client is used to interact with features provided by the test.devsy.sh group.
 type TestV1Client struct {
 	restClient rest.Interface
 }
