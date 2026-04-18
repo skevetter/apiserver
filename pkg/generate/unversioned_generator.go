@@ -60,10 +60,11 @@ var UnversionedAPIImports = []string{
 	"k8s.io/apiserver/pkg/registry/generic",
 	"k8s.io/apiserver/pkg/registry/rest",
 	"github.com/devsy-org/apiserver/pkg/builders",
+	"github.com/devsy-org/apiserver/pkg/managerfactory",
 }
 
 var UnversionedAPITemplate = `
-type NewRESTFunc func() rest.Storage
+type NewRESTFunc func(factory managerfactory.SharedManagerFactory) rest.Storage
 
 var (
 	{{ range $api := .UnversionedResources -}}
@@ -75,12 +76,12 @@ var (
 			New{{ $api.REST }},
 		)
 		New{{ $api.REST }} = func(getter generic.RESTOptionsGetter) rest.Storage {
-			return New{{ $api.REST }}Func()
+			return New{{ $api.REST }}Func(Factory)
 		}
 		New{{ $api.REST }}Func NewRESTFunc
 		{{ if $api.StatusREST -}}
 		New{{ $api.StatusREST }} = func(getter generic.RESTOptionsGetter) rest.Storage {
-			return New{{ $api.StatusREST }}Func()
+			return New{{ $api.StatusREST }}Func(Factory)
 		}
 		New{{ $api.StatusREST }}Func NewRESTFunc
 		{{ end -}}
