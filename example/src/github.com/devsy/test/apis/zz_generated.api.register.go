@@ -3,7 +3,7 @@
 package apis
 
 import (
-	"github.com/skevetter/apiserver/pkg/builders"
+	"github.com/devsy-org/apiserver/pkg/builders"
 	"github.com/devsy/test/apis/test"
 	_ "github.com/devsy/test/apis/test/install" // Install the test group
 	testv1 "github.com/devsy/test/apis/test/v1"

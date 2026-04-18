@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/skevetter/apiserver/pkg/admission"
-	"github.com/skevetter/apiserver/pkg/apiserver"
-	"github.com/skevetter/apiserver/pkg/builders"
+	"github.com/devsy-org/apiserver/pkg/admission"
+	"github.com/devsy-org/apiserver/pkg/apiserver"
+	"github.com/devsy-org/apiserver/pkg/builders"
 	oteltrace "go.opentelemetry.io/otel/trace"
 	utilnet "k8s.io/apimachinery/pkg/util/net"
 	"k8s.io/apimachinery/pkg/util/sets"

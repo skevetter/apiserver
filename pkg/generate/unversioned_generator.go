@@ -59,7 +59,7 @@ var UnversionedAPIImports = []string{
 	"k8s.io/apimachinery/pkg/runtime/schema",
 	"k8s.io/apiserver/pkg/registry/generic",
 	"k8s.io/apiserver/pkg/registry/rest",
-	"github.com/skevetter/apiserver/pkg/builders",
+	"github.com/devsy-org/apiserver/pkg/builders",
 }
 
 var UnversionedAPITemplate = `

@@ -3,7 +3,7 @@
 package v1
 
 import (
-	"github.com/skevetter/apiserver/pkg/builders"
+	"github.com/devsy-org/apiserver/pkg/builders"
 	"github.com/devsy/test/apis/test"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"

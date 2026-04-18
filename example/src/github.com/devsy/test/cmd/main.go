@@ -17,7 +17,7 @@ limitations under the License.
 package main
 
 import (
-	apiserver "github.com/skevetter/apiserver/pkg/server"
+	apiserver "github.com/devsy-org/apiserver/pkg/server"
 	"github.com/devsy/test/apis"
 	"github.com/devsy/test/apis/test"
 	testv1 "github.com/devsy/test/apis/test/v1"

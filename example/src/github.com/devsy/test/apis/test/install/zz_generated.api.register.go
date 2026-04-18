@@ -3,7 +3,7 @@
 package install
 
 import (
-	"github.com/skevetter/apiserver/pkg/builders"
+	"github.com/devsy-org/apiserver/pkg/builders"
 	"github.com/devsy/test/apis/test"
 	"github.com/devsy/test/apis/test/v1"
 	"k8s.io/apimachinery/pkg/runtime"

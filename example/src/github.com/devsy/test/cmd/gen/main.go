@@ -20,7 +20,7 @@ import (
 	"os"
 	"runtime"
 
-	template2 "github.com/skevetter/apiserver/pkg/generate"
+	template2 "github.com/devsy-org/apiserver/pkg/generate"
 
 	"k8s.io/klog/v2"
 )

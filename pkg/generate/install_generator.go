@@ -25,7 +25,7 @@ func CreateInstallGenerator(apigroup *APIGroup, filename string) generator.Gener
 func (d *installGenerator) Imports(c *generator.Context) []string {
 	apisPkg := path.Dir(d.apigroup.Pkg.Path)
 	imports := []string{
-		"github.com/skevetter/apiserver/pkg/builders",
+		"github.com/devsy-org/apiserver/pkg/builders",
 		`utilruntime "k8s.io/apimachinery/pkg/util/runtime"`,
 		"k8s.io/apimachinery/pkg/runtime",
 		// `metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"`,

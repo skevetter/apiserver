@@ -1,4 +1,4 @@
-module github.com/skevetter/apiserver
+module github.com/devsy-org/apiserver
 
 go 1.25.0
 
